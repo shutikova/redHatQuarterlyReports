@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Download quarterly report</title>
+    <!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'generateReport/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'generateReport/colors.css' %}">
+
+</head>
+<body>
+    <script>
+      window.open("{{ url }}", "_blank");
+    </script>
+    <!-- Navbar -->
+    <nav>
+        <img src="{% static 'images/logo.png' %}"
+                     height="70"
+                     alt="Red Hat"
+                     loading="lazy"
+                     class="d-inline-block align-top"
+                     style="margin-right: 50px"
+                />
+        <h1>Quarterly report was successfully generated</h1>
+	</nav>
+
+	<!-- Content -->
+	<div class="content" style="text-align: center">
+            <p>Thank you for using this tool!</p>
+            <p>Generated report will open in a new window, or you can find it <a href="{{url}}" target="_blank" style="color: var(--secondary)"> here</a>.</p>
+
+            <form method="post" action="{% url 'generate_report' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">Go back</button>
+            </form>
+	</div>
+
+	<!-- Footer -->
+	<footer>
+		<div class="container align-items-center" style="display: inline-block; align-self: center; height: 80px">
+            <div class="row">
+              <div class="col-md-6">
+                <p>&copy; 2023 RHELCMP team</p>
+              </div>
+              <div class="col-md-5">
+                <ul class="list-unstyled">
+                  <li><a href="https://docs.google.com/spreadsheets/d/17IhPYl6opGUp-VS-3KPG4DJwdeXJEe-Bes_bAxzfEzo">Example of generated report</a></li>
+                  <li><a href="https://mail.google.com/mail/?view=cm&to={{ email }}">Contact Us</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+	</footer>
+
+</body>
+</html>

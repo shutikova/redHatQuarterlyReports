@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Generate quarterly report</title>
+    <!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'generateReport/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'generateReport/colors.css' %}">
+
+</head>
+<body>
+	<!-- Navbar -->
+	<nav>
+        <img src="{% static 'images/logo.png' %}"
+                     height="70"
+                     alt="Red Hat"
+                     loading="lazy"
+                     class="d-inline-block align-top"
+                     style="margin-right: 50px"
+                />
+        <h1>Generate quarterly report</h1>
+	</nav>
+
+    <!-- Content -->
+	<div class="content content-wrapper">
+		<form action="{% url 'results' %}" method="post">
+            {% csrf_token %}
+            <h4 style="margin-bottom: 20px">Planned FTE values for following categories:</h4>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="wp">Work Packages:</label>
+                        <input type="number" step="any" class="form-control" id="wp" name="wp" placeholder="Enter planned FTE for WP" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="relop">Planned Release Operations:</label>
+                        <input type="number" step="any" class="form-control" id="relop" name="relop" placeholder="Enter planned FTE for Planned Release Operations" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="maint">Tooling Maintenance:</label>
+                        <input type="number" step="any" class="form-control" id="maint" name="maint" placeholder="Enter planned FTE for Tooling Maintenance" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="stand">Standalone Items:</label>
+                        <input type="number" step="any" class="form-control" id="stand" name="stand" placeholder="Enter planned FTE for Standalone Items" value="0">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="up">Upstream Work:</label>
+                        <input type="number" step="any" class="form-control" id="up" name="up" placeholder="Enter planned FTE for Upstream Work" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="sup">Support:</label>
+                        <input type="number" step="any" class="form-control" id="sup" name="sup" placeholder="Enter planned FTE for Support" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="other">Other programs:</label>
+                        <input type="number" step="any" class="form-control" id="other" name="other" placeholder="Enter planned FTE for Other programs" value="0">
+                    </div>
+                </div>
+            </div>
+            <h4 style="margin-bottom: 20px; margin-top: 20px">Team and quarter:</h4>
+            <div class="row">
+                <div class="form-group col">
+                    <label for="team">Team:</label>
+                    <select class="form-control" id="team" name="team">
+                        {% for team in teams_list %}
+                            <option value="{{ team.id }}">{{ team.team_text }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col">
+                    <label for="quarter">Quarter:</label>
+                    <select class="form-control" id="quarter" name="quarter">
+                        {% for quarter in quarters_list %}
+                            <option value="{{ quarter.id }}">{{ quarter.quarter_text }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+			<button type="submit" class="btn btn-primary button" id="generate" onclick="showPopup()">Calculate</button>
+			<button type="reset" class="btn btn-secondary">Reset</button>
+		</form>
+	</div>
+
+    <!-- popup.html -->
+    <div class="popup-container" style="display: none">
+        <div class="popup">
+            <div class="loading-icon" style="color: var(--secondary)"></div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+
+    <script>
+    function showPopup() {
+        document.querySelector('.popup-container').style.display = 'flex';
+        document.querySelector('form').submit();
+    }
+    </script>
+
+	<!-- Footer -->
+	<footer>
+		<div class="container align-items-center" style="display: inline-block; align-self: center; height: 80px">
+            <div class="row">
+              <div class="col-md-6">
+                <p>&copy; 2023 RHELCMP team</p>
+              </div>
+              <div class="col-md-5">
+                <ul class="list-unstyled">
+                  <li><a href="https://docs.google.com/spreadsheets/d/17IhPYl6opGUp-VS-3KPG4DJwdeXJEe-Bes_bAxzfEzo">Example of generated report</a></li>
+                  <li><a href="https://mail.google.com/mail/?view=cm&to={{ email }}">Contact Us</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+	</footer>
+
+</body>
+</html>
