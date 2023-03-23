@@ -50,3 +50,5 @@ gspread~=5.7.2
 webcolors~=1.12
 pandas~=1.5.3
 jira~=3.4.1
+gspread-formatting~=1.1.2
+gspread-dataframe~=3.3.0
