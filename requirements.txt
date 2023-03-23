@@ -52,3 +52,4 @@ pandas~=1.5.3
 jira~=3.4.1
 gspread-formatting~=1.1.2
 gspread-dataframe~=3.3.0
+google-api-python-client~=2.82.0
