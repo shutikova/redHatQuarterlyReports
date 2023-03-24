@@ -6,7 +6,7 @@ from traceback import format_exc
 from generateReport.models import Quarter, Team
 from generateReport.create_report import create_report
 
-configuration = json.load(open("resources/configuration.json"))
+configuration = json.load(open("redHatQuarterlyReports/resources/configuration.json"))
 
 
 def index(request):
