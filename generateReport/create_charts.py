@@ -14,9 +14,9 @@ def create_service():
     service = None
     credentials = None
 
-    if os.path.exists("resources/token.json"):
+    if os.path.exists("../resources/token.json"):
         credentials = Credentials.from_authorized_user_file(
-            "resources/token.json", SCOPES
+            "../resources/token.json", SCOPES
         )
     # If there are no credentials available, let the user log in.
     if not credentials or not credentials.valid:
@@ -24,11 +24,11 @@ def create_service():
             credentials.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "resources/credentials.json", SCOPES
+                "../resources/credentials.json", SCOPES
             )
             credentials = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open("resources/token.json", "w") as token:
+        with open("../resources/token.json", "w") as token:
             token.write(credentials.to_json())
 
     try:
