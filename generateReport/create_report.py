@@ -10,7 +10,7 @@ from jira import JIRA, exceptions, resources
 from typing import List, Optional
 from generateReport.create_charts import create_pie_chart, create_bar_chart
 
-configuration = json.load(open("redHatQuarterlyReports/resources/configuration.json"))
+configuration = json.load(open("resources/configuration.json"))
 
 
 def authorisation() -> Optional[JIRA]:
