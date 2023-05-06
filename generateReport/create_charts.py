@@ -16,7 +16,7 @@ def create_service():
 
     if os.path.exists("resources/token.json"):
         credentials = Credentials.from_authorized_user_file(
-            "redHatQuarterlyReports/resources/token.json", SCOPES
+            "resources/token.json", SCOPES
         )
     # If there are no credentials available, let the user log in.
     if not credentials or not credentials.valid:

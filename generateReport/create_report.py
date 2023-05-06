@@ -20,9 +20,8 @@ def authorisation() -> Optional[JIRA]:
     return jira
 
 
-def get_wp(
-    jira: JIRA, team: str, quarter: str, quarter_start: str, quarter_end: str
-) -> Optional[List[resources.Issue]]:
+def get_wp(jira: JIRA, team: str, quarter: str, quarter_start: str, quarter_end: str)\
+        -> Optional[List[resources.Issue]]:
     jql_request = (
         f"project={team} and issueFunction in issuesInEpics('project={team} and issuetype=Epic and "
         f"fixVersion in ({quarter})') and resolved >= '{quarter_start}'"
@@ -31,9 +30,8 @@ def get_wp(
     return jira.search_issues(jql_request, maxResults=10000)
 
 
-def get_release_operations(
-    jira: JIRA, team: str, quarter_start: str, quarter_end: str
-) -> Optional[List[resources.Issue]]:
+def get_release_operations(jira: JIRA, team: str, quarter_start: str, quarter_end: str)\
+        -> Optional[List[resources.Issue]]:
     jql_request1 = (
         f"project={team} AND issuetype not in (Ticket, Sub-task, Epic) AND "
         f"EXD-WorkType = 'Release Operations' AND EXD-WorkType not in ('Maintenance') "
@@ -44,17 +42,16 @@ def get_release_operations(
     jql_request2 = (
         f"project={team} AND issuetype not in (Ticket, Sub-task, Epic) "
         f"AND resolved >= '{quarter_start}' AND resolved < "
-        f"'{quarter_end}' AND 'Parent Link' is not EMPTY AND 'Story Points' is "
-        f"not EMPTY"
+        f"'{quarter_end}' AND issueFunction in linkedIssuesOf(\"issuetype = 'Release Milestone'\", 'is parent of')"
+        f" AND 'Story Points' is not EMPTY"
     )
     return jira.search_issues(jql_request1, maxResults=10000) + jira.search_issues(
         jql_request2, maxResults=10000
     )
 
 
-def get_maintenance(
-    jira: JIRA, team: str, quarter_start: str, quarter_end: str
-) -> Optional[List[resources.Issue]]:
+def get_maintenance(jira: JIRA, team: str, quarter_start: str, quarter_end: str)\
+        -> Optional[List[resources.Issue]]:
     jql_request = (
         f"project={team} AND issuetype not in (Ticket, Sub-task, Epic) AND "
         f"EXD-WorkType not in ('Release Operations') AND EXD-WorkType = "

@@ -50,6 +50,7 @@ def results(request):
         context = {
             "error_message": quote(format_exc()),
             "subject": quote("Error occurred in quarterly reporting tool"),
-            "email": configuration["contact_email"],
+            # "email": configuration["contact_email"],
+            "email": "yshutiko@redhat.com"
         }
         return render(request, "generateReport/error.html", context)
