@@ -32,22 +32,17 @@ def get_wp(jira: JIRA, team: str, quarter: str, quarter_start: str, quarter_end:
 
 def get_release_operations(jira: JIRA, team: str, quarter_start: str, quarter_end: str)\
         -> Optional[List[resources.Issue]]:
-    jql_request1 = (
-        f"project={team} AND issuetype not in (Ticket, Sub-task, Epic) AND "
+    jql_request = (
+        f"(project={team} AND issuetype not in (Ticket, Sub-task, Epic) AND "
         f"EXD-WorkType = 'Release Operations' AND EXD-WorkType not in ('Maintenance') "
         f"AND resolved >= '{quarter_start}' AND resolved < '"
-        f"{quarter_end}' AND 'Epic Link' is EMPTY AND 'Story Points' is not EMPTY"
-    )
-
-    jql_request2 = (
-        f"project={team} AND issuetype not in (Ticket, Sub-task, Epic) "
+        f"{quarter_end}' AND 'Epic Link' is EMPTY AND 'Story Points' is not EMPTY) OR"
+        f"(project={team} AND issuetype not in (Ticket, Sub-task, Epic) "
         f"AND resolved >= '{quarter_start}' AND resolved < "
         f"'{quarter_end}' AND issueFunction in linkedIssuesOf(\"issuetype = 'Release Milestone'\", 'is parent of')"
-        f" AND 'Story Points' is not EMPTY"
+        f" AND 'Story Points' is not EMPTY)"
     )
-    return jira.search_issues(jql_request1, maxResults=10000) + jira.search_issues(
-        jql_request2, maxResults=10000
-    )
+    return jira.search_issues(jql_request, maxResults=10000)
 
 
 def get_maintenance(jira: JIRA, team: str, quarter_start: str, quarter_end: str)\
@@ -133,15 +128,15 @@ def comments(fte_difference: List[float]) -> List[str]:
     for i in fte_difference:
         if i > 0:
             comm.append(
-                f"In reality, roughly {round(i, 2)} FTEs were working on this category; less than was planned"
+                f"In reality, roughly {round(i, 2)} FTEs less than was planned worked on this category"
             )
         elif i < 0:
             comm.append(
-                f"In reality, roughly {round(i, 2)} FTEs were working on this category; more than was planned"
+                f"In reality, roughly {round(abs(i), 2)} FTEs more than was planned worked on this category"
             )
         else:
             comm.append(
-                f"In reality, roughly {round(i, 2)} FTEs were working on this category; same as was planned"
+                f"In reality, roughly the same as was planned FTEs worked on this category"
             )
     return comm
 
